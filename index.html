@@ -11,6 +11,8 @@
 
 body{
 	overflow-y: none;
+	background-color: #2f3136;
+
 }
 
 #esquerdo{
@@ -36,7 +38,7 @@ body{
 }
 
 #indireito{
-	background-color: white;
+	
 	width: 90%;
 	height: 100%;
 	
@@ -83,6 +85,9 @@ textarea{
 	border: none;
 	resize: none;
 	padding: 20;
+	background-color: #2f3136;
+	color: white;
+	text-shadow: 0px 0px 2px black;
 }
 
 #tempocorrent{
@@ -117,7 +122,7 @@ textarea{
 
 #gravando{
 	position: absolute;
-	top: 30;
+	top: 50;
 	left: 30;
 	background-color: red;
 	z-index: 10;
@@ -146,6 +151,20 @@ textarea{
 	left:0;
 	width: 100%;
 	z-index: 20;
+	text-shadow: 0px 0px 2px black;
+}
+
+label{
+	color: white;
+	position: absolute;
+	top: 10;
+	left: 10;
+	vertical-align: center;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	padding:10;
+
 }
 
 
@@ -179,7 +198,9 @@ textarea{
 		<input id="t4" contenteditable></input>
 	</div>
 
-	<div id="legen">Legenda</div>
+	<label><input type="checkbox" id="che" checked>LEGENDA ATIVA</label>
+
+	<div id="legen"></div>
 
 </div>
 
@@ -191,7 +212,6 @@ textarea{
 	</div>
 
 	<div id="menu">
-		<button id="voltlar1">Voltar 1</button><br>
 		<button id=down>Baixar</button>
 	</div>
 </div>
@@ -335,6 +355,11 @@ textarea{
 		ar3.shift()
 
 		
+		for(i=0;i<ar3.length;i++){
+			ar3[i] = ar3[i].replace(/\n\n\d+/g,"")
+		}
+
+		
 		val = parseInt(t1.value+t2.value+t3.value+t4.value)
 
 		k = ar2.indexOf(ar2.filter( item => item < val ).pop())
@@ -342,7 +367,7 @@ textarea{
 
 		if(k%2==0)	k++
 
-		kk++
+			kk++
 
 		if(kk%2!=0)
 			legen.innerHTML = ar3[((k+1)/2)-1]
@@ -352,9 +377,10 @@ textarea{
 		
 		console.log(kk)
 
-
-		
-
+		if(che.checked)
+			legen.style.display="block"
+		else
+			legen.style.display="none"
 	}
 
 	t4.onmousewheel=function(e){
@@ -398,5 +424,7 @@ textarea{
 
 		download(conteudo, nomeArquivo+".srt");
 	}
+
+	//by Herick - Hatatori
 
 </script>
