@@ -90,6 +90,7 @@ textarea{
 	position: absolute;
 	left: 10;
 	bottom: 40;
+	z-index: 50;
 }
 
 #tempocorrent *{
@@ -97,6 +98,7 @@ textarea{
 	display: inline-block;
 	background-color: grey;
 	padding: 10;
+
 }
 
 #tempocorrent input{
@@ -105,11 +107,12 @@ textarea{
 	width: 50;
 	text-align: center;
 	color: white;
+	z-index:200;
 }
 
 #tempocorrent input:hover{
-	background-color: red;
 	cursor: pointer;
+	background-color: orangered;
 }
 
 #gravando{
@@ -134,6 +137,18 @@ textarea{
 	width: 50;
 	height: 50;
 }
+
+#legen{
+	color: white;
+	font-size: 30;
+	position: absolute;
+	bottom: 50;
+	left:0;
+	width: 100%;
+	z-index: 20;
+}
+
+
 
 </style>
 
@@ -164,7 +179,11 @@ textarea{
 		<input id="t4" contenteditable></input>
 	</div>
 
+	<div id="legen">Legenda</div>
+
 </div>
+
+
 
 <div id="direito">
 	<div id="indireito" contenteditable>
@@ -218,6 +237,9 @@ textarea{
 	}
 
 	a = 1
+	obj = []
+	k = 0
+	b= 0
 
 	fin.onclick=function(){
 
@@ -269,6 +291,8 @@ textarea{
 		}
 
 		gravando.removeAttribute("style")
+
+
 	}
 
 	
@@ -282,7 +306,7 @@ textarea{
 		mB = parseInt((vid.currentTime / 60) % 60)
 		hB = parseInt(vid.currentTime/60/60)
 
-		console.log(msB)
+		
 
 		if(sB < 10) sB = "0"+sB;
 		if(mB < 10) mB = "0"+mB;
@@ -299,9 +323,33 @@ textarea{
 		if(t4.value.length == 1) t4.value = "00"+t4.value;
 		if(t4.value.length == 2) t4.value = "0"+t4.value;
 
+		//legenda
+
+		ar = cont.value
+		ar2 = ar.match(/\d+:\d+:\d+,\d+/g)
+		ar2 = ar2.map(function(e){
+			return parseInt(e.replace(/\:|,/g,""))
+		})
+
+		ar3 = ar.split(/\d\n\d+\:.+\,\d+/g)
+		ar3.shift()
+
 		
+		val = parseInt(t1.value+t2.value+t3.value+t4.value)
+
+		k = ar2.indexOf(ar2.filter( item => item < val ).pop())
+
+		if(k%2==0)	k++
+
+		legen.innerHTML = ar3[((k+1)/2)-1]
+		
+		console.log(((k+1)/2)-1)
+
+
+		
+
 	}
-	
+
 	t4.onmousewheel=function(e){
 		if(e.deltaY < 0) vid.currentTime += 0.1;
 		if(e.deltaY > 0) vid.currentTime -= 0.1;	
@@ -319,7 +367,8 @@ textarea{
 
 
 	window.onkeyup=function(e){
-		console.log(e)
+		if(e.key == "-") vid.currentTime -= 1;
+		if(e.key == "+") vid.currentTime += 1;
 	}
 
 
@@ -338,8 +387,9 @@ textarea{
 		nomeArquivo = nomeArquivo.pop()
 		nomeArquivo = nomeArquivo.split(".")[0]
 
+		conteudo = cont.value.replace(/\n/g,"\r\n");
 
-		download(cont.value, nomeArquivo+".srt");
+		download(conteudo, nomeArquivo+".srt");
 	}
 
 </script>
