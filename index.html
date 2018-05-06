@@ -338,12 +338,19 @@ textarea{
 		val = parseInt(t1.value+t2.value+t3.value+t4.value)
 
 		k = ar2.indexOf(ar2.filter( item => item < val ).pop())
+		kk = ar2.indexOf(ar2.filter( item => item < val ).pop())
 
 		if(k%2==0)	k++
 
-		legen.innerHTML = ar3[((k+1)/2)-1]
+		kk++
+
+		if(kk%2!=0)
+			legen.innerHTML = ar3[((k+1)/2)-1]
+		else
+			legen.innerHTML = ""
 		
-		console.log(((k+1)/2)-1)
+		
+		console.log(kk)
 
 
 		
