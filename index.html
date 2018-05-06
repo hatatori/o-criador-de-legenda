@@ -402,28 +402,41 @@ label{
 	window.onkeyup=function(e){
 		if(e.key == "-") vid.currentTime -= 1;
 		if(e.key == "+") vid.currentTime += 1;
-	}
 
-
-	down.onclick=function(){
-		function download(text, filename){
-			var blob = new Blob([text], {type: "text/plain"});
-			var url = window.URL.createObjectURL(blob);
-			var a = document.createElement("a");
-			a.href = url;
-			a.download = filename;
-			a.click();
+		if(e.key == "\'"){
+			if(!vid.paused) vid.pause();
+			else vid.play()
 		}
 
-		nomeArquivo = inp.value
-		nomeArquivo = nomeArquivo.split("\\")
-		nomeArquivo = nomeArquivo.pop()
-		nomeArquivo = nomeArquivo.split(".")[0]
+	
 
-		conteudo = cont.value.replace(/\n/g,"\r\n");
+	if(e.key == "1") reg.click();
+	if(e.key == "2") fin.click();
+	if(e.key == "/") vid.currentTime -= .5
+		if(e.key == "*") vid.currentTime += .5
 
-		download(conteudo, nomeArquivo+".srt");
 	}
+
+
+down.onclick=function(){
+	function download(text, filename){
+		var blob = new Blob([text], {type: "text/plain"});
+		var url = window.URL.createObjectURL(blob);
+		var a = document.createElement("a");
+		a.href = url;
+		a.download = filename;
+		a.click();
+	}
+
+	nomeArquivo = inp.value
+	nomeArquivo = nomeArquivo.split("\\")
+	nomeArquivo = nomeArquivo.pop()
+	nomeArquivo = nomeArquivo.split(".")[0]
+
+	conteudo = cont.value.replace(/\n/g,"\r\n");
+
+	download(conteudo, nomeArquivo+".srt");
+}
 
 	//by Herick - Hatatori
 
