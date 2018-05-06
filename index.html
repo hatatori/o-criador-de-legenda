@@ -1,0 +1,311 @@
+<style>
+*{
+	padding: 0;
+	margin: 0;
+	font-family: monospace;
+	font-size: 16;
+	text-decoration: none;
+	list-style: none;
+	outline: none;
+}
+
+body{
+	overflow-y: none;
+}
+
+#esquerdo{
+	width: 100%;
+	height: 50%;
+	background-color: black;
+	position: absolute;
+	top: 0;
+	left: 0;
+	text-align: center;
+
+}
+
+#direito{
+	width: 100%;
+	height: 50%;
+	position: absolute;
+	top: 50%;
+	left: 0%;
+	
+	overflow-y: none;
+
+}
+
+#indireito{
+	background-color: white;
+	width: 90%;
+	height: 100%;
+	
+	margin: auto;
+	
+	
+}
+
+#box{
+	position: absolute;
+	right: 10;
+	top: 10;
+}
+
+video{
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+button{
+	width: 35;
+	height: 35;
+	margin:10;
+	padding: 5;
+}
+
+input[type="file"]{
+	padding: 10;
+	background-color: white;
+}
+
+li{
+	padding: 10;
+	background-color: white;
+	margin: 2;
+	width: 80%;
+	margin: 10 auto;
+}
+
+textarea{
+	width: 100%;
+	height: 95%;
+	border: none;
+	resize: none;
+	padding: 20;
+}
+
+#tempocorrent{
+	color: white;
+	position: absolute;
+	left: 10;
+	bottom: 40;
+}
+
+#tempocorrent *{
+	color: white;
+	display: inline-block;
+	background-color: grey;
+	padding: 10;
+}
+
+#tempocorrent input{
+	border: none;
+	height: 50;
+	width: 50;
+	text-align: center;
+	color: white;
+}
+
+#tempocorrent input:hover{
+	background-color: red;
+	cursor: pointer;
+}
+
+#gravando{
+	position: absolute;
+	top: 30;
+	left: 30;
+	background-color: red;
+	z-index: 10;
+	width: 50;
+	height: 50;
+	border-radius: 100%;
+	display: none;
+}
+
+</style>
+
+<meta charset="utf-8">
+
+
+<div id="esquerdo">
+	<div id="gravando"></div>
+	<input type="file" id=inp ><br>
+	<video id=vid width="100%" height="100%"  controls style="display: none"></video>
+	<div id="box">
+		<button id="menos0">-5</button>
+		<button id="mais0">+5</button><br>
+		<button id="menos">-1</button>
+		<button id="mais">+1</button><br>
+		<button id="menos2">-.5</button>
+		<button id="mais2">+.5</button><br>
+		<button id="menos3">-.1</button>
+		<button id="mais3">+.1</button><br>
+		<button id="reg">R</button>
+		<button id="fin">F</button>
+	</div>
+
+	<div id="tempocorrent">
+		<input id="t1" contenteditable></input>
+		<input id="t2" contenteditable></input>
+		<input id="t3" contenteditable></input>
+		<input id="t4" contenteditable></input>
+	</div>
+
+</div>
+
+<div id="direito">
+	<div id="indireito" contenteditable>
+		<textarea placeholder="A legenda será escrita aqui" id="cont" contenteditable wrap="soft"></textarea>
+	</div>
+</div>
+
+<script>
+
+	inp.onchange = function(e){
+		vid.removeAttribute("style")
+		vid.src = URL.createObjectURL(this.files[0]);
+		this.style.display="none"
+	}
+
+	mais0.onclick= () => vid.currentTime+=5
+	menos0.onclick= () => vid.currentTime-=5
+
+	mais.onclick= () => vid.currentTime+=1
+	menos.onclick= () => vid.currentTime-=1
+
+	mais2.onclick= () => vid.currentTime+=0.5
+	menos2.onclick= () => vid.currentTime-=0.5	
+
+	mais3.onclick= () => vid.currentTime+=0.1
+	menos3.onclick= () => vid.currentTime-=0.1	
+
+
+	reg.onclick=function(){
+
+		msA = parseFloat( ( vid.currentTime % 60).toFixed(3) )
+		msA = parseInt(msA.toString().split(".").pop())
+		sA = parseInt(vid.currentTime % 60)
+		mA = parseInt((vid.currentTime / 60) % 60)
+		hA = parseInt(vid.currentTime/60/60)
+
+		//if(msA < 10) msA = "00"+msA;
+		msA = t4.value
+
+		if(sA < 10) sA = "0"+sA;
+		if(mA < 10) mA = "0"+mA;
+		if(hA < 10) hA = "0"+hA;
+
+		gravando.style.display="block"
+		
+	}
+
+	a = 1
+
+	fin.onclick=function(){
+
+
+
+		try{
+			a = (cont.value.match(/-->/g).length)+=1
+		}catch(err){
+			a = 1
+		}
+
+
+		msB = parseFloat( ( vid.currentTime % 60).toFixed(3) )
+		msB = parseInt(msB.toString().split(".").pop())
+
+		sB = parseInt(vid.currentTime % 60)
+		mB = parseInt((vid.currentTime / 60) % 60)
+		hB = parseInt(vid.currentTime/60/60)
+
+		msB = t4.value
+
+
+		//if(msB < 10) msB = "00"+msB;
+		if(sB < 10) sB = "0"+sB;
+		if(mB < 10) mB = "0"+mB;
+		if(hB < 10) hB = "0"+hB;
+		
+
+
+
+		legenda = prompt("Informe o trecho");
+
+		t = [hA,mA,sA,msA,hB,mB,sB,msB];
+
+		tempoA = "hA:mA:sA,msA --> hB:mB:sB,msB"
+
+		tempo = tempoA.replace(/([a-zA-Z])+/g,function(e){
+			return t.shift()
+		})
+
+		if(cont.value == 0){
+			cont.value += (a++)
+			cont.value += "\n"+tempo
+			cont.value+="\n"+legenda
+		}else{
+			cont.value += "\n\n"+(a++)
+			cont.value += "\n"+tempo
+			cont.value+="\n"+legenda
+		}
+
+		gravando.removeAttribute("style")
+	}
+
+	
+	var s = setInterval(rodarTempo,0)
+
+	function rodarTempo(){
+		msB = parseFloat( ( vid.currentTime % 60) )
+		msB = msB.toString().split(".").pop()
+
+		sB = parseInt(vid.currentTime % 60)
+		mB = parseInt((vid.currentTime / 60) % 60)
+		hB = parseInt(vid.currentTime/60/60)
+
+		console.log(msB)
+
+		if(sB < 10) sB = "0"+sB;
+		if(mB < 10) mB = "0"+mB;
+		if(hB < 10) hB = "0"+hB;
+
+		//tempocorrent.innerHTML = hB+":"+mB+":"+sB+":"+msB
+
+		t1.value = hB
+		t2.value = mB
+		t3.value = sB
+
+		t4.value = msB.substr(0,3)
+		
+		if(t4.value.length == 1) t4.value = "00"+t4.value;
+		if(t4.value.length == 2) t4.value = "0"+t4.value;
+
+		
+	}
+	
+	t4.onmousewheel=function(e){
+		if(e.deltaY < 0) vid.currentTime += 0.1;
+		if(e.deltaY > 0) vid.currentTime -= 0.1;	
+	}
+
+	t3.onmousewheel=function(e){
+		if(e.deltaY < 0) vid.currentTime += 1;
+		if(e.deltaY > 0) vid.currentTime -= 1;
+	}
+
+	t2.onmousewheel=function(e){
+		if(e.deltaY < 0) vid.currentTime += 60;
+		if(e.deltaY > 0) vid.currentTime -= 60;
+	}
+
+
+	window.onkeyup=function(e){
+		console.log(e)
+	}
+
+
+
+</script>
