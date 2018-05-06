@@ -124,6 +124,17 @@ textarea{
 	display: none;
 }
 
+#menu{
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+#menu button{
+	width: 50;
+	height: 50;
+}
+
 </style>
 
 <meta charset="utf-8">
@@ -158,6 +169,11 @@ textarea{
 <div id="direito">
 	<div id="indireito" contenteditable>
 		<textarea placeholder="A legenda será escrita aqui" id="cont" contenteditable wrap="soft"></textarea>
+	</div>
+
+	<div id="menu">
+		<button id="voltlar1">Voltar 1</button><br>
+		<button id=down>Baixar</button>
 	</div>
 </div>
 
@@ -205,7 +221,7 @@ textarea{
 
 	fin.onclick=function(){
 
-
+		vid.pause()
 
 		try{
 			a = (cont.value.match(/-->/g).length)+=1
@@ -307,5 +323,23 @@ textarea{
 	}
 
 
+	down.onclick=function(){
+		function download(text, filename){
+			var blob = new Blob([text], {type: "text/plain"});
+			var url = window.URL.createObjectURL(blob);
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = filename;
+			a.click();
+		}
+
+		nomeArquivo = inp.value
+		nomeArquivo = nomeArquivo.split("\\")
+		nomeArquivo = nomeArquivo.pop()
+		nomeArquivo = nomeArquivo.split(".")[0]
+
+
+		download(cont.value, nomeArquivo+".srt");
+	}
 
 </script>
